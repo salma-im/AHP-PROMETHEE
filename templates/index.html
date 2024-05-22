@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Critères</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <!-- Add the SheetJS library -->
+<script src="https://unpkg.com/xlsx@0.16.8/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+
+
+     <style>
+        h2 {
+    margin-top: 20px; /* Adjust as needed */
+    margin-bottom: 20px; /* Adjust as needed */
+}
+    </style>
+</head>
+
+<body>
+    <main class="table">
+        <section class="table__header">
+            <h1>Liste des Critères</h1>
+        </section>
+
+        <section class="table__body">
+            <!-- Afficher les données originales -->
+            <div id="originalData">
+                <h2>Données Originales</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Prix</th>
+                            <th>Stockage</th>
+                            <th>Caméra</th>
+                            <th>Design</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for critere in criteres %}
+                        <tr>
+                            <td>{{ critere.id }}</td>
+                            <td>{{ critere.name }}</td>
+                            <td>{{ critere.prix }}</td>
+                            <td>{{ critere.stockage }}</td>
+                            <td>{{ critere.camera }}</td>
+                            <td>{{ critere.design }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Afficher les données normalisées -->
+            <div id="normalizedData" style="display: none;">
+                <h2>Données Normalisées</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prix</th>
+                            <th>Stockage</th>
+                            <th>Caméra</th>
+                            <th>Design</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for critere in critere_list2 %}
+                        <tr>
+                            <td>{{ critere.name }}</td>
+                            <td>{{ critere.prix }}</td>
+                            <td>{{ critere.stockage }}</td>
+                            <td>{{ critere.camera }}</td>
+                            <td>{{ critere.design }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Afficher les valeurs PI -->
+            <div id="piValues" style="display: none;">
+                <h2>Valeurs PI</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>PI</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for critere in critere_list3 %}
+                        <tr>
+                            <td>{{ critere.name }}</td>
+                            <td>{{ critere.pi }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Afficher les valeurs de flux -->
+            <div id="fluxValues" style="display: none;">
+                <h2>Valeurs de Flux</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Flux Entrant</th>
+                            <th>Flux Sortant</th>
+                            <th>Flux Net</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for critere in critere_list4 %}
+                        <tr>
+                            <td>{{ critere.name }}</td>
+                            <td>{{ critere.flux_entrant }}</td>
+                            <td>{{ critere.flux_sortant }}</td>
+                            <td>{{ critere.flux_net }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Afficher le classement -->
+            <div id="ranking" style="display: none;">
+                <h2>Classement</h2>
+                {% for critere in critere_list5 %}
+                <p>Le {{ critere.name }} est classé numéro {{ critere.rank }}</p>
+                {% endfor %}
+            </div>
+
+            <!-- Boutons de navigation -->
+             <div class="navigation">
+                <button id="previousButton" onclick="showPrevious()">Précédent</button>
+                <button id="nextButton" onclick="showNext()">Suivant</button>
+
+
+   <button id="exportButton" onclick="exportToExcel()" style="margin-left: 8cm;background-color:green;">Exporter en Excel</button>
+<!-- <button id="exportPDFButton" onclick="exportToPDF()" style="background-color: red">Exporter en PDF</button>-->
+
+
+
+
+
+            </div>
+        </section>
+    </main>
+
+
+    <script>
+        var currentStep = 0;
+        var steps = document.querySelectorAll('.table__body > div');
+        var previousButton = document.getElementById('previousButton');
+        var nextButton = document.getElementById('nextButton');
+
+        function showNext() {
+            steps[currentStep].style.display = 'none';
+            currentStep++;
+            steps[currentStep].style.display = 'block';
+            updateButtonVisibility();
+        }
+
+        function showPrevious() {
+            steps[currentStep].style.display = 'none';
+            currentStep--;
+            steps[currentStep].style.display = 'block';
+            updateButtonVisibility();
+        }
+
+        function updateButtonVisibility() {
+    if (currentStep === 0) {
+        previousButton.style.display = 'none';
+    } else {
+        previousButton.style.display = 'block';
+    }
+
+    if (currentStep === steps.length - 2) {
+        nextButton.style.display = 'none';
+       exportButton.style.display = 'block';
+      <!--  exportPDFButton.style.display = 'block';-->
+    } else {
+        nextButton.style.display = 'block';
+        exportButton.style.display = 'none';
+        <!--exportPDFButton.style.display = 'none';-->
+    }
+}
+
+
+
+        updateButtonVisibility();
+
+
+        function exportToExcel() {
+
+    var data = [];
+
+
+    var tables = document.querySelectorAll('.table__body table');
+    tables.forEach(function(table) {
+
+        var tableName = table.closest('div').querySelector('h2').textContent;
+        data.push([tableName]);
+
+
+        var columnNames = [];
+        var headerCells = table.querySelectorAll('thead th');
+        headerCells.forEach(function(cell) {
+            columnNames.push(cell.textContent);
+        });
+        data.push(columnNames);
+
+
+        var rows = table.querySelectorAll('tr');
+        rows.forEach(function(row) {
+            var rowData = [];
+            var cells = row.querySelectorAll('td');
+            cells.forEach(function(cell) {
+                rowData.push(cell.textContent);
+            });
+            data.push(rowData);
+        });
+        data.push([]);
+    });
+
+    var rankingTitle = document.querySelector('#ranking h2').textContent;
+    data.push([rankingTitle]); // Add title for ranking section
+    var rankingParagraphs = document.querySelectorAll('#ranking p');
+    rankingParagraphs.forEach(function(paragraph) {
+        data.push([paragraph.textContent]);
+    });
+
+    var wb = XLSX.utils.book_new();
+
+    var ws = XLSX.utils.aoa_to_sheet(data);
+
+    XLSX.utils.book_append_sheet(wb, ws, "Data");
+
+    XLSX.writeFile(wb, "exported_data.xlsx");
+}
+
+
+/*
+function exportToPDF() {
+  // Create a new jsPDF document
+  const doc = new jsPDF('p', 'pt', 'letter');
+
+  // Define the margins and styles
+  const margin = 40;
+  const titleFont = 'Helvetica';
+  const titleFontSize = 18;
+  const textFont = 'Helvetica';
+  const textFontSize = 12;
+
+  // Get the data tables
+  const tables = document.querySelectorAll('.table__body table');
+
+  // Loop through the tables and add them to the PDF
+  tables.forEach((table, index) => {
+    // Get the table title
+    const title = table.closest('div').querySelector('h2').textContent;
+
+    // Add the table title to the PDF
+    doc.setFont(titleFont, 'bold');
+    doc.setFontSize(titleFontSize);
+    doc.text(margin, 20 + (index * 100), title);
+
+    // Get the table data
+    const rows = table.querySelectorAll('tr');
+
+    // Loop through the rows and add them to the PDF
+    rows.forEach((row, rowIndex) => {
+      // Skip the first row (header row)
+      if (rowIndex === 0) return;
+
+      // Get the cells in the row
+      const cells = row.querySelectorAll('td');
+
+      // Loop through the cells and add them to the PDF
+      cells.forEach((cell, colIndex) => {
+        // Add the cell data to the PDF
+        doc.setFont(textFont, 'normal');
+        doc.setFontSize(textFontSize);
+        doc.text(margin + (colIndex * 100), 40 + (index * 100) + (rowIndex * 20), cell.textContent);
+      });
+    });
+  });
+
+  // Save the PDF
+  doc.save('exported_data.pdf');
+}*/
+
+
+    </script>
+
+</body>
+
+</html>
