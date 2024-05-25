@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHP Method</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+ <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+header {
+    background: #35424a;
+    color: #ffffff;
+    padding-top: 30px;
+    min-height: 70px;
+    border-bottom: #e8491d 3px solid;
+}
+
+header h1 {
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0;
+    font-size: 24px;
+}
+
+main {
+    padding: 20px;
+    background: #ffffff;
+    margin-top: 10px;
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    margin: 20px 0;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #dddddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+button {
+    background-color: #35424a;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: #e8491d;
+}
+</style>
+<body>
+    <div class="container">
+        <header>
+            <h1>AHP Method for Project: {{ project.name }}</h1>
+        </header>
+        <main>
+            <section>
+                <h2>The comparison matrix of criteria</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            {% for criterion in criteria %}
+                                <th>{{ criterion.name }}</th>
+                            {% endfor %}
+                            <th>Weights</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in range(criteria|length) %}
+                        <tr>
+                            <td>{{ criteria[i].name }}</td>
+                            {% for j in range(criteria|length) %}
+                                <td><input type="number" step="0.01" value="{{ matrix[i][j] }}" disabled></td>
+                            {% endfor %}
+                            <td>{{ weights[i] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p>CR Value: {{ cr_value }}</p>
+                <button id="reset-button">RESET</button>
+                <button id="compare-button">COMPARE BETWEEN THE SUB-CRITERIA</button>
+            </section>
+        </main>
+    </div>
+    <script>
+        document.getElementById('reset-button').addEventListener('click', function() {
+            alert('Reset button clicked');
+        });
+
+        document.getElementById('compare-button').addEventListener('click', function() {
+            alert('Compare button clicked');
+        });
+    </script>
+</body>
+</html>

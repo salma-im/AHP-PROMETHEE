@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enter Alternatives</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2>Enter Alternatives for Project</h2>
+        <form action="{{ url_for('add_alternatives', project_id=project_id) }}" method="POST">
+            <div class="form-group">
+                <label for="numAlternatives">Number of Alternatives:</label>
+                <input type="number" class="form-control" id="numAlternatives" name="numAlternatives" required onchange="createInputFields();">
+            </div>
+            <div id="alternativeInputs" class="form-group"></div>
+            <button type="submit" class="btn btn-primary">Submit Alternatives</button>
+        </form>
+    </div>
+
+    <script>
+        function createInputFields() {
+            var number = document.getElementById('numAlternatives').value;
+            var container = document.getElementById('alternativeInputs');
+            container.innerHTML = '';
+            for (i = 0; i < number; i++) {
+                container.innerHTML += '<label for="alternative' + i + '">Alternative ' + (i+1) + ':</label><input type="text" class="form-control" id="alternative' + i + '" name="alternative' + i + '" required><br>';
+            }
+        }
+    </script>
+</body>
+</html>

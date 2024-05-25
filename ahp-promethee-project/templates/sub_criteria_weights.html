@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sub-Criteria Weights and Alternatives</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2>Sub-Criteria Weights and Alternatives</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Sub-Criteria</th>
+                    <th>Weight</th>
+                    {% for alternative in alternatives %}
+                    <th>{{ alternative }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub_criterion, weight in sub_criteria_weights %}
+                <tr>
+                    <td>{{ sub_criterion }}</td>
+                    <td>{{ weight }}</td>
+                    {% for alternative in alternatives %}
+                    <td></td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{{ url_for('success') }}" class="btn btn-success">Finish</a>
+    </div>
+</body>
+</html>
